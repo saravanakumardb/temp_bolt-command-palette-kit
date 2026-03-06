@@ -1,92 +1,87 @@
-# Bolt — Command Palette + Keyboard Shortcuts Kit (Micro-App)
+# Bolt — Command Palette + Keyboard Shortcuts Kit
 
-Before you start: read and follow `DESIGN_SYSTEM_BRIEF.md`, `UX_TOKEN_CONTRACT.md`, `REPO_SCOPING_RULES.md`, and `ACCEPTANCE_CHECKLIST.md`.
+**GitHub repo:** `saravanakumardb/temp_bolt-command-palette-kit`
+
+## Push Instructions
+
+- Push directly to `main` — do NOT open a PR
+- Only modify files in this repo
+
+## Rules
+
+- No `console.log`
+- No network calls — mock data / localStorage only
+- No hardcoded colors — no hex, no rgb/rgba/hsl, no `bg-[#123456]` Tailwind classes
+- Do NOT commit `.env*`, `.next/`, `node_modules/`, `.vercel/`
+- pnpm only
+- `pnpm run check` must pass (`tsc --noEmit` + `eslint`)
+- `pnpm run build` must pass (`next build --webpack`)
+
+## CSS Token Contract
+
+Define in `src/app/globals.css` under `:root` (add `.dark` override):
+
+- `--ux-bg` — page background
+- `--ux-surface` — card/panel surface
+- `--ux-surface-2` — elevated surface
+- `--ux-border` — borders
+- `--ux-text` — primary text
+- `--ux-text-muted` — secondary text
+- `--ux-accent` — primary accent
+- `--ux-accent-foreground` — text on accent
+- `--ux-danger` — destructive/error
+- `--ux-warning` — warning
+- `--ux-success` — success
+- `--ux-ring` — focus ring
+- `--ux-shadow` — shadows
+
+Use only via Tailwind: `bg-[var(--ux-surface)]`, `text-[var(--ux-text)]`, `border-[var(--ux-border)]`
+
+## Component Architecture
+
+- Reusable components → `src/components/`
+- Pages in `src/app/**` compose components only
+- Components must NOT import from `src/app/**`
+
+## Stack
+
+- Next.js 16 App Router, React 19, TypeScript strict
+- TailwindCSS v4, pnpm
 
 ## Mission
 
-Build a production-grade **command palette + keyboard shortcuts kit** micro-app (Next.js App Router) that we can copy into:
+Build a production-grade **command palette + keyboard shortcuts kit** micro-app reusable across `dashboards/admin-web`, `dashboards/tracker-web`, and product web apps.
 
-- `dashboards/admin-web`
-- `dashboards/tracker-web`
-- product web apps
-
-This is implementation-heavy: correctness, a11y, and clean component boundaries matter.
-
-## Constraints
-
-- Only modify files in this repository.
-- pnpm only.
-- Next.js 16 App Router, React 19, TypeScript strict.
-- TailwindCSS v4.
-- No network calls.
-- No `console.log`.
-- No hardcoded colors — use `--ux-*` CSS variables from `UX_TOKEN_CONTRACT.md`.
-- Avoid unnecessary dependencies. If you add a dependency, justify why it is required.
-
-## Must-have routes
+## Pages
 
 - `/` overview landing
 - `/palette` command palette demo
-- `/shortcuts` shortcuts reference + editor demo
-- `/integration` copy/paste integration guide page (UI-only)
+- `/shortcuts` shortcuts reference + editor
+- `/integration` copy/paste integration guide (UI-only)
 
-## Core deliverable: Command palette
-
-Build `CommandPalette` with:
+## Command Palette
 
 - Open via `Cmd+K` (and `Ctrl+K` fallback)
-- Search box
-- Grouped actions (e.g., Navigation, Actions, Settings)
-- Optional action keywords (alias terms)
-- Recent actions (persist to localStorage)
-- Favorites/pinned actions (localStorage)
-- Keyboard navigation:
-  - Up/Down
-  - Enter to execute
-  - Esc to close
+- Search box with grouped actions (Navigation, Actions, Settings)
+- Optional action keywords (aliases)
+- Recent actions + favorites/pinned (localStorage)
+- Keyboard: Up/Down, Enter to execute, Esc to close
 - Mouse support
+- Dialog semantics, focus trap, focus returns on close, ARIA labels
 
-Accessibility requirements:
-
-- Proper dialog semantics
-- Focus trap while open
-- Focus returns to opener on close
-- ARIA labels for listbox/options
-
-## Shortcuts registry
-
-Create a small shortcuts registry system:
+## Shortcuts Registry
 
 - `registerShortcut({ id, keys, description, scope })`
-- Scopes: global vs page-specific (simple; no complex routing coupling)
-- A `/shortcuts` page that lists all registered shortcuts
-- A UI to remap a shortcut (client-side only) and persist to localStorage
-- Collision detection (warn if two actions use the same key combo)
+- Scopes: global vs page-specific
+- `/shortcuts` page listing all registered shortcuts
+- Remap shortcuts UI (localStorage), collision detection
 
-## Demo content
+## Demo Content
 
-Include 20–30 demo actions:
-
-- Navigation actions to pages
-- Theme toggle
-- “Copy JSON” demo action
-- “Clear local data” demo action with confirm dialog
-
-## Deliverables
-
-- Full Next.js app with scripts:
-  - `dev`
-  - `check` (must run `tsc --noEmit` + `eslint`)
-  - `build` (must run `next build --webpack`)
+20–30 demo actions: navigation, theme toggle, "Copy JSON", "Clear local data" (confirm dialog)
 
 ## Verification
 
-From repo root:
-
-- `pnpm install`
-- `pnpm run check`
-- `pnpm run build`
-
-## Output expectation
-
-Open a PR that only changes files in this repo.
+```
+pnpm install && pnpm run check && pnpm run build
+```
